@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../styles/App.css";
 import Header from "../components/Header";
 import Level1Image from "../assets/level-1.jpeg";
 import Level2Image from "../assets/level-2.jpeg";
 import Level3Image from "../assets/level-3.jpeg";
+import { X } from "react-feather";
 
 // component to display landing page
 const GamePage = (props) => {
@@ -14,6 +16,17 @@ const GamePage = (props) => {
     characters,
     getCoordinates,
     guessActive,
+    checkForMatch,
+    fetchCoords,
+    errorMessage,
+    successMessage,
+    checkCompletion,
+    displayForm,
+    closeForm,
+    submitForm,
+    username,
+    editForm,
+    timeElapsed,
 
   } = props;
 
@@ -33,14 +46,44 @@ const GamePage = (props) => {
 
   checkLevel();
 
+  useEffect(() => {
+    fetchCoords();
+  }, [activeLevel]);
+
+  useEffect(() => {
+    checkCompletion();
+  }, [characters]);
+
+  let formComplete = false;
+
+  const checkForm = () => {
+    if (username.length > 0) {
+      formComplete = true;
+    } else if (username.length === 0) {
+      formComplete = false;
+    }
+  }
+
+  checkForm();
+
   return (
-    <div className="game-container">
+    <div className={displayForm ? "game-container page-overlay" : "game-container"}>
       <Header
         game={game}
         activeLevel={activeLevel}
         endGame={endGame}
         characters={characters}
       />
+      {errorMessage.show && (
+        <div className="feedback feedback-fail">
+          <p className="feedback-text">Try again!</p>
+        </div>
+      )}
+      {successMessage.show && (
+        <div className="feedback feedback-success">
+          <p className="feedback-text">Nice job!</p>
+        </div>
+      )}
       {level1 && (
         <img src={Level1Image} className="game-image" onClick={getCoordinates} />
       )}
@@ -53,13 +96,32 @@ const GamePage = (props) => {
       {guessActive && (
         <div className="guess-character-container">
           {characters.map((character, index) => {
+              let found = character.found;
               return (
-                <p className="guess-character-text">{character.name}</p>
+                <p className={found ? "option-found" : "guess-character-text"} key={index} onClick={found ? undefined : checkForMatch} id={character.id}>{character.name}</p>
               )
             })}
         </div>
       )}
-      
+      {displayForm && (
+        <div className="modal-container">
+          <div className="score-modal">
+            <div className="modal-heading">
+              <p className="modal-heading-text">Submit your score</p>
+              <Link to="/" className="link">
+                <X className="modal-close-button" onClick={closeForm}/>
+              </Link>
+            </div>
+            <p className="modal-description-text">You completed this level in <span className="modal-text-bold">{timeElapsed}</span> seconds! Enter your name below to save your score.</p>
+            <input className="modal-entry" value={username} onChange={editForm}></input>
+            {formComplete && (
+              <Link to="/" className="link">
+                <button className="modal-submit-button" onClick={submitForm}>Submit</button>
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

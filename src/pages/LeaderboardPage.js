@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/App.css";
 import Header from "../components/Header";
 
@@ -9,6 +9,11 @@ const LeaderboardPage = (props) => {
     toggleLevel,
     levelDisplayed,
     endGame,
+    fetchResults,
+    leaderboard1,
+    leaderboard2,
+    leaderboard3,
+    dataReady,
 
   } = props;
 
@@ -16,26 +21,32 @@ const LeaderboardPage = (props) => {
   let level2 = false;
   let level3 = false;
 
+  let scoresDisplayed = leaderboard1;
+
   const checkLevel = () => {
     if (levelDisplayed === 1) {
       level1 = true;
       level2 = false;
       level3 = false;
-      console.log(levelDisplayed);
+      scoresDisplayed = leaderboard1;
     } else if (levelDisplayed === 2) {
       level1 = false;
       level2 = true;
       level3 = false;
-      console.log(levelDisplayed);
+      scoresDisplayed = leaderboard2;
     } else if (levelDisplayed === 3) {
       level1 = false;
       level2 = false;
       level3 = true;
-      console.log(levelDisplayed);
+      scoresDisplayed = leaderboard3;
     }
   }
 
   checkLevel();
+
+  useEffect(() => {
+    fetchResults();
+  }, []);
 
   return (
     <div className="leaderboard-container">
@@ -57,11 +68,22 @@ const LeaderboardPage = (props) => {
       <div className="leaderboard-section">
         <h2 className="leaderboard-heading">Leaderboard</h2>
         <div className="results-section">
-          <div className="result-container">
-            <p className="rank-text">1</p>
-            <p className="user-text">Username 23 Anonymous</p>
-            <p className="time-text">23.182s</p>
-          </div>
+          {!dataReady && (
+            <div class="loader"></div>
+          )}
+          {dataReady && (
+            <>
+              {scoresDisplayed.map((entry, index) => {
+                return (
+                  <div  className="result-container" key={index}>
+                    <p className="rank-text">{index + 1}</p>
+                    <p className="user-text">{entry.user}</p>
+                    <p className="time-text">{entry.time}s</p>
+                  </div>
+                )
+              })}
+            </>
+          )}
         </div>
       </div>
     </div>

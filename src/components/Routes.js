@@ -17,6 +17,23 @@ const Routes = (props) => {
     toggleLevel,
     levelDisplayed,
     guessActive,
+    checkForMatch,
+    fetchCoords,
+    errorMessage,
+    successMessage,
+    checkCompletion,
+    displayForm,
+    closeForm,
+    submitForm,
+    username,
+    editForm,
+    startTime,
+    timeElapsed,
+    fetchResults,
+    leaderboard1,
+    leaderboard2,
+    leaderboard3,
+    dataReady,
 
   } = props;
 
@@ -48,6 +65,18 @@ const Routes = (props) => {
             characters={characters}
             getCoordinates={getCoordinates}
             guessActive={guessActive}
+            checkForMatch={checkForMatch}
+            fetchCoords={fetchCoords}
+            errorMessage={errorMessage}
+            successMessage={successMessage}
+            checkCompletion={checkCompletion}
+            displayForm={displayForm}
+            closeForm={closeForm}
+            submitForm={submitForm}
+            username={username}
+            editForm={editForm}
+            startTime={startTime}
+            timeElapsed={timeElapsed}
           />
         )}
       />
@@ -62,6 +91,11 @@ const Routes = (props) => {
             levelDisplayed={levelDisplayed}
             toggleLevel={toggleLevel}
             endGame={endGame}
+            fetchResults={fetchResults}
+            leaderboard1={leaderboard1}
+            leaderboard2={leaderboard2}
+            leaderboard3={leaderboard3}
+            dataReady={dataReady}
           />
         )}
       />

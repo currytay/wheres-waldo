@@ -28,8 +28,9 @@ const Header = (props) => {
           </div>
           <div className="character-section">
             {characters.map((character, index) => {
+              let found = character.found;
               return (
-                <div className="header-character">
+                <div className={found ? "header-character character-found" : "header-character"} key={index}>
                   <img className="header-character-image" src={character.src} alt={character.alt} />
                   <p className="header-character-name">{character.name}</p>
                 </div>  
