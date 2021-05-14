@@ -10,7 +10,6 @@ const Header = (props) => {
     activeLevel,
     endGame,
     characters,
-
   } = props;
 
   return (
@@ -23,9 +22,6 @@ const Header = (props) => {
       </Link>
       {game && (
         <>
-          <div className="level-section">
-            <p className="level-text">Level {activeLevel}</p>
-          </div>
           <div className="character-section">
             {characters.map((character, index) => {
               let found = character.found;

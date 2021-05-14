@@ -87,6 +87,7 @@ body {
   font-size: 16px;
   font-weight: 600;
   margin: 0;
+  color: #000;
 }
 
 .level-character-images {
@@ -166,19 +167,6 @@ body {
 
 .header-link-text {
   margin: 0;
-  color: #000;
-}
-
-.level-section {
-  flex: auto;
-  position: absolute;
-  right: 50%;
-  visibility: hidden;
-}
-
-.level-text {
-  margin: 0;
-  font-weight: 600;
   color: #000;
 }
 
@@ -521,13 +509,5 @@ body {
   }
   100% {
       opacity: 0;
-  }
-}
-
-/* media queries */
-
-@media (min-width: 960px) {
-  .level-section {
-    visibility: visible;
   }
 }

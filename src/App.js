@@ -7,17 +7,20 @@ import Wenda from "./assets/wenda.jpg";
 import Odlaw from "./assets/odlaw.jpg";
 import Wizard from "./assets/wizard.jpg";
 import firebase from "firebase/app";
-import { addTestData, firestore, getValidCoordinates } from "./Firebase";
+import { firestore } from "./Firebase";
 
 function App() {
 
+  // variable and function to start game
   const [game, setGame] = useState(false);
+  const [startTime, setStartTime] = useState();
 
   const startGame = () => {
     setGame(true);
     setStartTime(Date.now());
   }
 
+  // function to end game
   const endGame = () => {
     setGame(false);
     setLevelDisplayed(1);
@@ -25,12 +28,13 @@ function App() {
     setCharactersFound(0);
   }
 
-  // track valid coords for each character
+  // variables to track valid coords for each character
   const [waldoCoords, setWaldoCoords] = useState([]);
   const [wendaCoords, setWendaCoords] = useState([]);
   const [odlawCoords, setOldawCoords] = useState([]);
   const [wizardCoords, setWizardCoords] = useState([]);
 
+  // function to fetch valid coords for each character
   const fetchCoords = () => {
     let currentLevel = "level-" + activeLevel;
     let waldoData = firestore.collection(currentLevel).doc("waldo");
@@ -55,19 +59,13 @@ function App() {
         setWizardCoords({ x: doc.data().xCoords, y: doc.data().yCoords })
       });
     }
-    // docRef.get().then((doc) => {
-    //   let results = doc.data();
-    //   let xRes = results.xCoords;
-    //   let yRes = results.yCoords;
-    //   testCoords = xRes;
-    //   setTempX(xRes);
-    //   setTempY(yRes);
-    // });
   }
 
+  // variables to track active level and respective characters
   const [activeLevel, setActiveLevel] = useState(null);
   const [characters, setCharacters] = useState([]);
 
+  // character arrays
   const level1Chars = [
     {
       name: "Waldo",
@@ -123,6 +121,7 @@ function App() {
     },
   ];
 
+  // function to set level based on user selection
   const setLevel = (event) => {
     let levelID = event.currentTarget.id;
     let levelNum = parseInt(levelID.slice(-1));
@@ -134,6 +133,7 @@ function App() {
     setActiveLevel(levelNum);
   }
 
+  // vars + function to determine/track user guesses
   const [guessActive, setGuessActive] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [xCoordsGuess, setXCoordsGuess] = useState();
@@ -142,13 +142,13 @@ function App() {
   const getCoordinates = (event) => {
     let percentX = ((event.nativeEvent.offsetX / event.currentTarget.offsetWidth) * 100).toFixed(0);
     let percentY = ((event.nativeEvent.offsetY / event.currentTarget.offsetHeight) * 100).toFixed(0);
-    console.log(percentX, percentY);
     setCoords({ x: percentX, y: percentY });
     setXCoordsGuess(percentX);
     setYCoordsGuess(percentY);
     setGuessActive(true);
   }
 
+  // var + function to determine level displayed on leaderboard page
   const [levelDisplayed, setLevelDisplayed] = useState(1);
 
   const toggleLevel = (event) => {
@@ -157,27 +157,11 @@ function App() {
     setLevelDisplayed(levelNum);
   }
 
-  const [tempX, setTempX] = useState([]);
-  const [tempY, setTempY] = useState([]);
-
+  // functions to check for match between user guess and valid coords
   const checkForMatch = (event) => {
     let selectedCharacter = event.target.id;
     compareCoords(selectedCharacter);
     setGuessActive(false);
-  }
-
-  const getResults = (name) => {
-    let docRef = firestore.collection(`"level-1"`).doc(name);
-    let testCoords;
-  
-    docRef.get().then((doc) => {
-      let results = doc.data();
-      let xRes = results.xCoords;
-      let yRes = results.yCoords;
-      testCoords = xRes;
-      setTempX(xRes);
-      setTempY(yRes);
-    });
   }
 
   const compareCoords = (name) => {
@@ -206,19 +190,17 @@ function App() {
     }
 
     if (xValid.includes(xGuess) && yValid.includes(yGuess)) {
-      console.log("match!");
       let currentCharacters = [...characters];
       currentCharacters[indexValue].found = true;
       setCharacters([...currentCharacters]);
       setCharactersFound(charactersFound + 1);
       displaySuccess();
     } else {
-      console.log("no match :(");
       displayError();
     }
   }
 
-  // create variable to display error message if size not selected
+  // variable to display error message if user guess is wrong
   const [errorMessage, setErrorMessage] = useState({
     show: false,
   });
@@ -233,10 +215,12 @@ function App() {
     }
   };
 
+  // variable to display success message if user guess is correct
   const [successMessage, setSuccessMessage] = useState({
     show: false,
   });
 
+  // function to display success message
   const displaySuccess = () => {
     if (!errorMessage.show) {
       setSuccessMessage((prev) => ({ ...prev, show: true })); // show error
@@ -246,22 +230,22 @@ function App() {
     }
   }
 
+  // vars + function to track level completion and details
   const [charactersFound, setCharactersFound] = useState(0);
   const [displayForm, setDisplayForm] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState();
 
   const checkCompletion = () => {
     if (charactersFound ===  characters.length) {
-      console.log("complete!");
       setDisplayForm(true);
       let endTime = Date.now();
       setTimeElapsed((endTime - startTime) / 1000);
     } else {
-      console.log("almost there");
       return;
     }
   }
 
+  // vars + function to edit, close, submit form
   const [username, setUsername] = useState("");
 
   const editForm = (event) => {
@@ -288,36 +272,10 @@ function App() {
     setDisplayForm(false);
   }
 
-  const [startTime, setStartTime] = useState();
-
+  // vars + function to fetch and store leaderboard data
   const [leaderboard1, setLeaderboard1] = useState();
   const [leaderboard2, setLeaderboard2] = useState();
   const [leaderboard3, setLeaderboard3] = useState();
-
-  // // const fetchResults = () => {
-  // //   let level2Scores = firestore.collection("level-2-scores");
-  // //   let leaderboardArray = [];
-
-  // //   level2Scores.orderBy("time", "asc").get().then((querySnapshot) => {
-  // //     querySnapshot.forEach((doc) => {
-  // //         // doc.data() is never undefined for query doc snapshots
-  // //         // console.log(doc.data());
-  // //         leaderboardArray.push(doc.data());
-  // //         console.log(leaderboardArray);
-  // //     });
-  // // });
-
-  // const fetffchResults = () => {
-  //   let level2Scores = firestore.collection("level-2-scores");
-  //   let leaderboardArray = [];
-
-  //   level2Scores.orderBy("time", "asc").get().then((querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       leaderboardArray.push(doc.data());
-  //     })
-  //   })
-  //   setLeaderboard2([...leaderboardArray]);
-  // }
 
   const [dataReady, setDataReady] = useState(false);
 

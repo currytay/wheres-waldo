@@ -14,9 +14,9 @@ const LeaderboardPage = (props) => {
     leaderboard2,
     leaderboard3,
     dataReady,
-
   } = props;
 
+  // vars + function to change content based on level selected by user
   let level1 = false;
   let level2 = false;
   let level3 = false;
@@ -44,6 +44,7 @@ const LeaderboardPage = (props) => {
 
   checkLevel();
 
+  // function to fetch leaderboard entries when page loads
   useEffect(() => {
     fetchResults();
   }, []);

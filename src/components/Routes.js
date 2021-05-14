@@ -34,7 +34,6 @@ const Routes = (props) => {
     leaderboard2,
     leaderboard3,
     dataReady,
-
   } = props;
 
   return (

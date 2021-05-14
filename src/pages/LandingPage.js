@@ -12,10 +12,8 @@ import Wizard from "../assets/wizard.jpg";
 // component to display landing page
 const LandingPage = (props) => {
   const { 
-    activeLevel,
     setLevel, 
     startGame,
-
   } = props;
 
   return (

@@ -15,32 +15,4 @@ firebase.initializeApp(firebaseConfig);
 
 export const firestore = firebase.firestore();
 
-export const getValidCoordinates = () => {
-  // return firestore.collection("level-1")
-  //   .doc("waldo")
-  //   .get()
-  let docRef = firestore.collection(`"level-1"`).doc("wenda");
-  let testCoords;
-
-  docRef.get().then((doc) => {
-    let results = doc.data();
-    let xRes = results.xCoords;
-    let yRes = results.yCoords;
-    testCoords = xRes;
-    console.log("document data: ", xRes, yRes);
-  })
-
-    // .then((doc) => {
-    //   let results = doc.data;
-    //   console.log("results", results)})
-}
-
-export const addTestData = () => {
-  return firestore.collection("test-collection")
-    .add({
-      created: firebase.firestore.FieldValue.serverTimestamp(),
-      createdBy: "Test User",
-    });
-};
-
 export default firebase;

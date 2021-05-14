@@ -8,7 +8,7 @@
 
 **Note:** This website is best viewed on high res screens (1080p and up). Check the [improvements section](#improvements) for future updates.
 
-**Gameplay demo ↓**
+**Landing page screenshot ↓**
 
 ![alt="screenshot of website"](src/assets/screenshot.png)
 

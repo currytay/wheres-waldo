@@ -27,9 +27,9 @@ const GamePage = (props) => {
     username,
     editForm,
     timeElapsed,
-
   } = props;
 
+  // vars + function change content based on level selected by user
   let level1 = false;
   let level2 = false;
   let level3 = false;
@@ -46,16 +46,19 @@ const GamePage = (props) => {
 
   checkLevel();
 
+  // function to fetch character coords when level changes
   useEffect(() => {
     fetchCoords();
   }, [activeLevel]);
 
+  // function to check for game completion (i.e., all characters found)
   useEffect(() => {
     checkCompletion();
   }, [characters]);
 
   let formComplete = false;
 
+  // function to check for form completion (i.e., user has entered username)
   const checkForm = () => {
     if (username.length > 0) {
       formComplete = true;
